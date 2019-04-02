@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://blog.zhangziwen.cn">
-  <title>Archives: 2019/3 | zoute&#39;s blog</title>
+  <title>使用VM创建虚拟机 | zoute&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="zoute&#39;s blog">
-<meta property="og:url" content="http://blog.zhangziwen.cn/archives/2019/03/index.html">
+  <meta name="description" content="前言 本文是在学习K8s的过程中需要搭建集群环境,通过使用vagrant工具快速搭建模拟的集群环境  准备工作 vagrant 依赖于virtualbox, 需要先安装virtualbox 下载安装vagrant  创建虚拟机 编写Vagrantfile  12345678910111213141516171819202122nodes = [  &amp;#123; :hostname =&amp;gt; &apos;m">
+<meta name="keywords" content="tool,vm,vagrant">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用VM创建虚拟机">
+<meta property="og:url" content="http://blog.zhangziwen.cn/create-vm-by-vagrant/index.html">
 <meta property="og:site_name" content="zoute&#39;s blog">
+<meta property="og:description" content="前言 本文是在学习K8s的过程中需要搭建集群环境,通过使用vagrant工具快速搭建模拟的集群环境  准备工作 vagrant 依赖于virtualbox, 需要先安装virtualbox 下载安装vagrant  创建虚拟机 编写Vagrantfile  12345678910111213141516171819202122nodes = [  &amp;#123; :hostname =&amp;gt; &apos;m">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-02T03:03:13.376Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zoute&#39;s blog">
+<meta name="twitter:title" content="使用VM创建虚拟机">
+<meta name="twitter:description" content="前言 本文是在学习K8s的过程中需要搭建集群环境,通过使用vagrant工具快速搭建模拟的集群环境  准备工作 vagrant 依赖于virtualbox, 需要先安装virtualbox 下载安装vagrant  创建虚拟机 编写Vagrantfile  12345678910111213141516171819202122nodes = [  &amp;#123; :hostname =&amp;gt; &apos;m">
   
     <link rel="alternative" href="/atom.xml" title="zoute&#39;s blog" type="application/atom+xml">
   
@@ -136,64 +141,223 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-create-vm-by-vagrant" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/wite-something/" class="archive-article-date">
-  	<time datetime="2019-03-31T03:59:55.843Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-31</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/wite-something/">随便写点什么纪念下</a>
+    <h1 class="article-title" itemprop="name">
+      使用VM创建虚拟机
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/create-vm-by-vagrant/" class="archive-article-date">
+  	<time datetime="2019-04-02T02:16:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><blockquote>
+<p>本文是在学习K8s的过程中需要搭建集群环境,通过使用vagrant工具快速搭建模拟的集群环境</p>
+</blockquote>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><ol>
+<li>vagrant 依赖于virtualbox, 需要先安装<a href="https://www.virtualbox.org/" target="_blank" rel="noopener">virtualbox</a></li>
+<li>下载安装<a href="https://www.vagrantup.com/" target="_blank" rel="noopener">vagrant</a></li>
+</ol>
+<h4 id="创建虚拟机"><a href="#创建虚拟机" class="headerlink" title="创建虚拟机"></a>创建虚拟机</h4><ol>
+<li>编写<a href="https://www.vagrantup.com/docs/vagrantfile/" target="_blank" rel="noopener">Vagrantfile</a></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">nodes = [</span><br><span class="line">  &#123; :hostname =&gt; <span class="string">'m01'</span>, :ip =&gt; <span class="string">'192.168.0.42'</span>, :box =&gt; <span class="string">'ubuntu/xenial64'</span> &#125;,</span><br><span class="line">  &#123; :hostname =&gt; <span class="string">'m02'</span>, :ip =&gt; <span class="string">'192.168.0.43'</span>, :box =&gt; <span class="string">'ubuntu/xenial64'</span> &#125;,</span><br><span class="line">  &#123; :hostname =&gt; <span class="string">'m03'</span>, :ip =&gt; <span class="string">'192.168.0.44'</span>, :box =&gt; <span class="string">'ubuntu/xenial64'</span> &#125;,</span><br><span class="line">] <span class="comment">#声明3个虚拟机节点的主机配置及ip</span></span><br><span class="line"></span><br><span class="line">Vagrant.configure(<span class="string">"2"</span>) <span class="keyword">do</span> |config|</span><br><span class="line">  nodes.each <span class="keyword">do</span> |node| <span class="comment">#循环创建节点</span></span><br><span class="line">    config.vm.define node[:hostname] <span class="keyword">do</span> |nodeconfig|</span><br><span class="line">      nodeconfig.vm.box = node[:box] <span class="comment">#虚拟机使用的镜像</span></span><br><span class="line">      nodeconfig.vm.hostname = node[:hostname] <span class="comment">#虚拟机的主机名</span></span><br><span class="line">      nodeconfig.vm.network :private_network, ip: node[:ip] <span class="comment">#虚拟机ip</span></span><br><span class="line">      nodeconfig.vm.provision <span class="string">"shell"</span>, path: <span class="string">"scripts/setup.sh"</span> <span class="comment">#创建主机后执行的shell脚本</span></span><br><span class="line">      memory = node[:ram] ? node[:ram] : 2048;</span><br><span class="line">      nodeconfig.vm.provider :virtualbox <span class="keyword">do</span> |vb|</span><br><span class="line">        vb.name = node[:hostname]</span><br><span class="line">        vb.memory = memory.to_s <span class="comment">#分配内存</span></span><br><span class="line">        vb.cpus = 1 <span class="comment">#分配cpu</span></span><br><span class="line">      end</span><br><span class="line">    end</span><br><span class="line">  end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>Vagrantfile类似于Dockerfile,将创建虚拟机的步骤程序化,一次编写之后下次再创建同样的虚拟机环境的时候只需要重新操作启动这个文件就可以<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># scripts/setup.sh</span></span><br><span class="line">ROOT_HOME=<span class="string">"/root"</span></span><br><span class="line">ROOT_SSH_HOME=<span class="string">"<span class="variable">$ROOT_HOME</span>/.ssh"</span></span><br><span class="line">ROOT_AUTHORIZED_KEYS=<span class="string">"<span class="variable">$ROOT_SSH_HOME</span>/authorized_keys"</span></span><br><span class="line">sudo ssh-keygen -t rsa -q -N <span class="string">""</span> -f <span class="string">"<span class="variable">$ROOT_SSH_HOME</span>/id_rsa"</span></span><br><span class="line">cat <span class="string">"<span class="variable">$ROOT_SSH_HOME</span>/id_rsa.pub"</span> &gt;&gt; <span class="string">"<span class="variable">$ROOT_AUTHORIZED_KEYS</span>"</span></span><br><span class="line">chmod 644 <span class="string">"<span class="variable">$ROOT_AUTHORIZED_KEYS</span>"</span></span><br><span class="line"><span class="comment"># 配置ssh 使得宿主机可以通过密码登陆虚拟机</span></span><br><span class="line"><span class="built_in">echo</span> root:root | sudo chpasswd</span><br><span class="line">sed -i <span class="string">"s/PermitRootLogin [a-zA-Z\-]\+$/PermitRootLogin yes/g"</span> /etc/ssh/sshd_config</span><br><span class="line">sed -i <span class="string">"s/PasswordAuthentication [a-z]\+$/PasswordAuthentication yes/g"</span> /etc/ssh/sshd_config</span><br><span class="line">sudo systemctl restart sshd</span><br></pre></td></tr></table></figure></p>
+<p>此脚本用于自定义配置,可以安需求自定义修改内容</p>
+<ol start="2">
+<li>启动虚拟机<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant up</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这里会有一个创建过程,因为需要从cloud上拉取虚拟镜像,等待完毕后即创建完成,然后可以在virtualbox中看到创建出来的虚拟机<br>登陆虚拟机<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant ssh <span class="comment">#登陆默认的vagrant用户</span></span><br><span class="line">$ ssh root@hostname <span class="comment">#本文配置后可以使用root账户密码直接登陆虚拟机</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4><ol>
+<li>寻找其他可用的虚拟镜像<a href="https://app.vagrantup.com/boxes/search" target="_blank" rel="noopener">vagrant boxes</a></li>
+<li>vagrant文档<a href="https://www.vagrantup.com/docs/index.html" target="_blank" rel="noopener">vagrant docs</a></li>
+</ol>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">闲话</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tool</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">写作</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vagrant</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Tool//" class="article-tag-list-link color5">Tool</a>
+        		</li>
+      		
+		</ul>
+	</div>
 
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://blog.zhangziwen.cn/create-vm-by-vagrant/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/wite-something/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">随便写点什么纪念下</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://blog.zhangziwen.cn/create-vm-by-vagrant/",
+  owner: 'j92z',
+  repo: 'j92z.github.io',
+  oauth: {
+    client_id: 'e821f84ae0c3243eb545',
+    client_secret: 'b0763dd8c9f137612614caf1e815895358ca63a0',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -216,8 +380,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

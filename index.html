@@ -138,6 +138,120 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-create-vm-by-vagrant" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/create-vm-by-vagrant/">使用VM创建虚拟机</a>
+    </h1>
+  
+
+        
+        <a href="/create-vm-by-vagrant/" class="archive-article-date">
+  	<time datetime="2019-04-02T02:16:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><blockquote>
+<p>本文是在学习K8s的过程中需要搭建集群环境,通过使用vagrant工具快速搭建模拟的集群环境</p>
+</blockquote>
+<h4 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h4><ol>
+<li>vagrant 依赖于virtualbox, 需要先安装<a href="https://www.virtualbox.org/" target="_blank" rel="noopener">virtualbox</a></li>
+<li>下载安装<a href="https://www.vagrantup.com/" target="_blank" rel="noopener">vagrant</a></li>
+</ol>
+<h4 id="创建虚拟机"><a href="#创建虚拟机" class="headerlink" title="创建虚拟机"></a>创建虚拟机</h4><ol>
+<li>编写<a href="https://www.vagrantup.com/docs/vagrantfile/" target="_blank" rel="noopener">Vagrantfile</a></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">nodes = [</span><br><span class="line">  &#123; :hostname =&gt; <span class="string">'m01'</span>, :ip =&gt; <span class="string">'192.168.0.42'</span>, :box =&gt; <span class="string">'ubuntu/xenial64'</span> &#125;,</span><br><span class="line">  &#123; :hostname =&gt; <span class="string">'m02'</span>, :ip =&gt; <span class="string">'192.168.0.43'</span>, :box =&gt; <span class="string">'ubuntu/xenial64'</span> &#125;,</span><br><span class="line">  &#123; :hostname =&gt; <span class="string">'m03'</span>, :ip =&gt; <span class="string">'192.168.0.44'</span>, :box =&gt; <span class="string">'ubuntu/xenial64'</span> &#125;,</span><br><span class="line">] <span class="comment">#声明3个虚拟机节点的主机配置及ip</span></span><br><span class="line"></span><br><span class="line">Vagrant.configure(<span class="string">"2"</span>) <span class="keyword">do</span> |config|</span><br><span class="line">  nodes.each <span class="keyword">do</span> |node| <span class="comment">#循环创建节点</span></span><br><span class="line">    config.vm.define node[:hostname] <span class="keyword">do</span> |nodeconfig|</span><br><span class="line">      nodeconfig.vm.box = node[:box] <span class="comment">#虚拟机使用的镜像</span></span><br><span class="line">      nodeconfig.vm.hostname = node[:hostname] <span class="comment">#虚拟机的主机名</span></span><br><span class="line">      nodeconfig.vm.network :private_network, ip: node[:ip] <span class="comment">#虚拟机ip</span></span><br><span class="line">      nodeconfig.vm.provision <span class="string">"shell"</span>, path: <span class="string">"scripts/setup.sh"</span> <span class="comment">#创建主机后执行的shell脚本</span></span><br><span class="line">      memory = node[:ram] ? node[:ram] : 2048;</span><br><span class="line">      nodeconfig.vm.provider :virtualbox <span class="keyword">do</span> |vb|</span><br><span class="line">        vb.name = node[:hostname]</span><br><span class="line">        vb.memory = memory.to_s <span class="comment">#分配内存</span></span><br><span class="line">        vb.cpus = 1 <span class="comment">#分配cpu</span></span><br><span class="line">      end</span><br><span class="line">    end</span><br><span class="line">  end</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+<p>Vagrantfile类似于Dockerfile,将创建虚拟机的步骤程序化,一次编写之后下次再创建同样的虚拟机环境的时候只需要重新操作启动这个文件就可以<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># scripts/setup.sh</span></span><br><span class="line">ROOT_HOME=<span class="string">"/root"</span></span><br><span class="line">ROOT_SSH_HOME=<span class="string">"<span class="variable">$ROOT_HOME</span>/.ssh"</span></span><br><span class="line">ROOT_AUTHORIZED_KEYS=<span class="string">"<span class="variable">$ROOT_SSH_HOME</span>/authorized_keys"</span></span><br><span class="line">sudo ssh-keygen -t rsa -q -N <span class="string">""</span> -f <span class="string">"<span class="variable">$ROOT_SSH_HOME</span>/id_rsa"</span></span><br><span class="line">cat <span class="string">"<span class="variable">$ROOT_SSH_HOME</span>/id_rsa.pub"</span> &gt;&gt; <span class="string">"<span class="variable">$ROOT_AUTHORIZED_KEYS</span>"</span></span><br><span class="line">chmod 644 <span class="string">"<span class="variable">$ROOT_AUTHORIZED_KEYS</span>"</span></span><br><span class="line"><span class="comment"># 配置ssh 使得宿主机可以通过密码登陆虚拟机</span></span><br><span class="line"><span class="built_in">echo</span> root:root | sudo chpasswd</span><br><span class="line">sed -i <span class="string">"s/PermitRootLogin [a-zA-Z\-]\+$/PermitRootLogin yes/g"</span> /etc/ssh/sshd_config</span><br><span class="line">sed -i <span class="string">"s/PasswordAuthentication [a-z]\+$/PasswordAuthentication yes/g"</span> /etc/ssh/sshd_config</span><br><span class="line">sudo systemctl restart sshd</span><br></pre></td></tr></table></figure></p>
+<p>此脚本用于自定义配置,可以安需求自定义修改内容</p>
+<ol start="2">
+<li>启动虚拟机<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant up</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这里会有一个创建过程,因为需要从cloud上拉取虚拟镜像,等待完毕后即创建完成,然后可以在virtualbox中看到创建出来的虚拟机<br>登陆虚拟机<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vagrant ssh <span class="comment">#登陆默认的vagrant用户</span></span><br><span class="line">$ ssh root@hostname <span class="comment">#本文配置后可以使用root账户密码直接登陆虚拟机</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4><ol>
+<li>寻找其他可用的虚拟镜像<a href="https://app.vagrantup.com/boxes/search" target="_blank" rel="noopener">vagrant boxes</a></li>
+<li>vagrant文档<a href="https://www.vagrantup.com/docs/index.html" target="_blank" rel="noopener">vagrant docs</a></li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">tool</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vm</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">vagrant</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Tool//" class="article-tag-list-link color5">Tool</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/create-vm-by-vagrant/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-wite-something" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -307,6 +421,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">tool</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">vagrant</a>
+              </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">闲话</a>
