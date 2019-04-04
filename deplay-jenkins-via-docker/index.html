@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="zoute&#39;s blog">
 <meta property="og:description" content="前言 随着项目结构的深入,为了减少服务的集成及部署的困难,使用jenkins来进行CI/CD,而作为一个工具,使用docker可以更好的管理迁移  准备工作 安装docker及docker-compose 在docker hub上查找适合使用的docker镜像,这里使用jenkins/jenkins  部署服务 编写docker-compose.yml  123456789101112versio">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-04T10:25:34.093Z">
+<meta property="og:updated_time" content="2019-04-04T10:26:55.553Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Docker部署jenkins服务">
 <meta name="twitter:description" content="前言 随着项目结构的深入,为了减少服务的集成及部署的困难,使用jenkins来进行CI/CD,而作为一个工具,使用docker可以更好的管理迁移  准备工作 安装docker及docker-compose 在docker hub上查找适合使用的docker镜像,这里使用jenkins/jenkins  部署服务 编写docker-compose.yml  123456789101112versio">
@@ -173,11 +173,11 @@
 </ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">version: <span class="string">'3.2'</span></span><br><span class="line">services:</span><br><span class="line">  jenkins:</span><br><span class="line">    image: jenkins/jenkins</span><br><span class="line">    container_name: jenkins</span><br><span class="line">    ports:</span><br><span class="line">      - <span class="string">"49991:8080"</span></span><br><span class="line">      - <span class="string">"50000:50000"</span></span><br><span class="line">    volumes:</span><br><span class="line">      - /home/ubuntu/app/jenkins:/var/jenkins_home/:rw</span><br><span class="line">      - ~/code/:/data/www/:rw</span><br><span class="line">    restart: always</span><br></pre></td></tr></table></figure>
 <ol start="2">
-<li><p>运行服务</p>
+<li>运行服务</li>
+</ol>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose up -d</span><br><span class="line"><span class="comment"># 成功之后查看容器运行情况 确认status</span></span><br><span class="line">$ docker ps -a | grep jenkins</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>访问 <a href="http://your-ip:49991" target="_blank" rel="noopener">http://your-ip:49991</a> 访问配置服务</p>
-</li>
+<ol start="3">
+<li>访问 <a href="http://your-ip:49991" target="_blank" rel="noopener">http://your-ip:49991</a> 访问配置服务</li>
 </ol>
 
       
@@ -450,15 +450,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+                <a href="javascript:void(0)" class="js-tag color5">tool</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
+                <a href="javascript:void(0)" class="js-tag color3">vm</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">CI/CD</a>
+                <a href="javascript:void(0)" class="js-tag color3">vagrant</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -470,15 +470,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">tool</a>
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vm</a>
+                <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">vagrant</a>
+                <a href="javascript:void(0)" class="js-tag color1">CI/CD</a>
               </li>
             
             <div class="clearfix"></div>
